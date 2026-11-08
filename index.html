@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FFD23F">
+<meta name="theme-color" content="#F1F2F4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1014" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cómics">
@@ -11,97 +12,114 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <title>Mis cómics</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;600&display=swap">
 <style>
-:root{--paper:#EDEFF5;--panel:#fff;--ink:#14161F;--muted:#5B6075;--hot:#FFD23F;--line:#14161F}
-@media (prefers-color-scheme:dark){:root{--paper:#12131A;--panel:#1C1E29;--ink:#F2F3F8;--muted:#A0A5BA;--line:#F2F3F8}}
+:root{--bg:#F1F2F4;--card:#fff;--ink:#15171C;--mu:#6B7080;--acc:#2F4BFF;--ok:#12A66A;--line:rgba(21,23,28,.14)}
+@media (prefers-color-scheme:dark){:root{--bg:#0E1014;--card:#181B22;--ink:#F1F2F5;--mu:#9AA0B2;--acc:#8A98FF;--ok:#3DD598;--line:rgba(255,255,255,.16)}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
-body{background:var(--paper);color:var(--ink);font:16px/1.4 Archivo,system-ui,sans-serif;padding:env(safe-area-inset-top,0px) 0 calc(76px + env(safe-area-inset-bottom,0px))}
-main{padding:14px}
-h1,h2,h3{font-family:"Archivo Black",Impact,sans-serif;font-weight:400;margin:0}
-h1{font-size:1.9rem}h2{font-size:1.15rem;margin:20px 0 8px}
+body{background:var(--bg);color:var(--ink);font:16px/1.4 "Instrument Sans",system-ui,sans-serif;padding:env(safe-area-inset-top,0px) 0 calc(72px + env(safe-area-inset-bottom,0px))}
+main{padding:18px 16px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;letter-spacing:-.01em}
+h1{font-size:2.1rem;font-weight:800;line-height:1.05;margin-bottom:16px}
+h2{font-size:1.15rem;font-weight:800;margin:24px 0 10px}
+h3{font-size:1rem;font-weight:600;line-height:1.2}
+p{margin:0}.mu{color:var(--mu);font-size:.85rem}
 button,input{font:inherit;color:inherit}
-button{background:var(--panel);border:3px solid var(--line);padding:10px 14px;font-weight:600;border-radius:0;min-height:44px}
-button:active,button.on{background:var(--hot);color:#14161F}
-input[type=text],input[type=url]{width:100%;background:var(--panel);border:3px solid var(--line);padding:10px;min-height:44px}
-.panel{background:var(--panel);border:3px solid var(--line);box-shadow:4px 4px 0 var(--line);padding:12px;margin-bottom:14px}
-.row{display:flex;gap:8px;align-items:center}
-.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.bar h2{margin:0;text-transform:capitalize}
-.bar button{width:44px;padding:0}
-.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;border-top:2px solid var(--line);border-left:2px solid var(--line)}
-.wd{text-align:center;font-size:.8rem;color:var(--muted);font-weight:600;padding:3px;border-right:2px solid var(--line);border-bottom:2px solid var(--line)}
-.d{min-height:50px;padding:3px 0;border:0;border-right:2px solid var(--line);border-bottom:2px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;font-weight:600;font-size:.9rem}
-.d.off{opacity:.35}.d.today span{background:var(--hot);color:#14161F;padding:0 5px;border:2px solid var(--line)}
-.d.sel{background:var(--hot);color:#14161F}
-.dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center}
-.dot{width:10px;height:10px;background:var(--c);border:2px solid var(--line);border-radius:50%}
-.dot.done{opacity:.4}
-.item{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:2px dashed var(--muted)}
-.item:last-child{border:0}
-.chip{flex:none;width:12px;align-self:stretch;background:var(--c);border:2px solid var(--line)}
-.item .r{margin-left:auto;text-align:right;color:var(--muted);font-size:.85rem}
-.muted{color:var(--muted);font-size:.9rem}
-.sc{border-left:12px solid var(--c)}
-.sc h3{font-size:1.1rem}
-.iss{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--muted)}
-.iss b{min-width:52px}.iss .dt{flex:1;color:var(--muted);font-size:.85rem}
-.iss button{min-height:36px;padding:2px 10px;border-width:2px;font-size:.85rem}
-summary{cursor:pointer;padding:8px 0;font-weight:600}
-nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:var(--panel);border-top:3px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-nav button{border:0;border-right:2px solid var(--line);min-height:60px;font-size:.85rem}
-nav button:last-child{border-right:0}
-#msg{position:fixed;left:14px;right:14px;top:calc(10px + env(safe-area-inset-top,0px));background:var(--ink);color:var(--paper);padding:10px 12px;z-index:5}
+button{background:none;border:0;padding:0;text-align:left;cursor:pointer}
+.btn{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;min-height:44px;font-weight:600;text-align:center}
+.btn.on{background:var(--acc);border-color:var(--acc);color:#fff}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+input[type=text],input[type=url]{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;min-height:46px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.cv{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:var(--c);box-shadow:0 6px 16px rgba(0,0,0,.22);display:flex;align-items:flex-end}
+.cv b{padding:8px;color:#15171C;font:600 .8rem/1.15 "Bricolage Grotesque",sans-serif}
+.cv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pill{position:absolute;left:6px;bottom:6px;font-style:normal;font-size:.7rem;font-weight:600;background:var(--acc);color:#fff;border-radius:99px;padding:2px 8px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.pill.ok{background:var(--ok);color:#0E1014}
+.shelf{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 16px}
+.bk{display:block;width:100%}.bk h3{margin:10px 0 2px}
+.pg{height:4px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden}.pg i{display:block;height:100%;background:var(--ok)}
+.hero{display:flex;gap:16px;margin-bottom:8px}.hero .cv{width:38%;flex:none}.hero>div:last-child{display:flex;flex-direction:column;gap:8px;justify-content:flex-end}
+.back{font-weight:600;color:var(--acc);min-height:44px;margin-bottom:4px}
+.issues{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 10px}
+.is{display:block}.is p{font-size:.8rem;margin-top:6px;font-weight:600}.is .mu{margin-top:0;font-weight:400;font-size:.72rem}
+.is.miss .cv{filter:grayscale(1);opacity:.5}
+.rail{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 12px;margin:0 -16px;padding-left:16px;scroll-snap-type:x proximity}
+.up{flex:none;width:112px;scroll-snap-align:start}.up p{font-size:.8rem;margin-top:6px;font-weight:600}
+.cal{background:var(--card);border-radius:16px;padding:12px}
+.bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.bar h2{margin:0;text-transform:capitalize}.bar .btn{width:44px;padding:0}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.wd{text-align:center;font-size:.75rem;color:var(--mu);padding:4px 0}
+.d{min-height:46px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:5px;font-size:.9rem;text-align:center}
+.d.off{opacity:.3}.d.today{border:1.5px solid var(--acc)}.d.sel{background:var(--acc);color:#fff}
+.dots{display:flex;gap:3px}.dot{width:7px;height:7px;border-radius:50%;background:var(--c)}.dot.done{opacity:.4}
+.li{display:flex;gap:12px;align-items:center;padding:8px 0;width:100%}.li .cv{width:44px;flex:none;border-radius:6px;box-shadow:none}
+.li .r{margin-left:auto;text-align:right}
+.panel{background:var(--card);border-radius:16px;padding:14px;margin-bottom:14px}
+.res{display:flex;align-items:center;gap:12px;justify-content:space-between}
+nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;font-size:.72rem;color:var(--mu);min-height:58px}
+nav button.on{color:var(--acc);font-weight:600}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bd{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10}
+.sh{position:fixed;left:0;right:0;bottom:0;z-index:11;background:var(--card);border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;gap:16px}
+.sh .cv{width:34%;flex:none}.sh>div:last-child{display:flex;flex-direction:column;gap:10px;flex:1}
+#msg{position:fixed;left:16px;right:16px;top:calc(10px + env(safe-area-inset-top,0px));background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:12px;z-index:20}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div id="msg" hidden role="status"></div>
 <main>
-<section id="v-cal">
+<section id="v-lib"></section>
+<section id="v-cal" hidden>
   <h1>Calendario</h1>
-  <div class="panel" style="margin-top:12px">
-    <div class="bar"><button id="prev" aria-label="Mes anterior">&lt;</button><h2 id="mt"></h2><button id="next" aria-label="Mes siguiente">&gt;</button></div>
+  <h2 style="margin-top:0">Próximamente</h2>
+  <div class="rail" id="rail"></div>
+  <div class="cal">
+    <div class="bar"><button class="btn" id="prev" aria-label="Mes anterior">&lt;</button><h2 id="mt"></h2><button class="btn" id="next" aria-label="Mes siguiente">&gt;</button></div>
     <div class="grid" id="grid"></div>
-    <div id="daylist" style="margin-top:10px"></div>
+    <div id="daylist"></div>
   </div>
-  <h2>Próximos lanzamientos</h2>
-  <div class="panel" id="up"></div>
-</section>
-<section id="v-col" hidden>
-  <h1>Colección</h1>
-  <div id="list" style="margin-top:12px"></div>
 </section>
 <section id="v-add" hidden>
   <h1>Añadir serie</h1>
-  <div class="row" style="margin:12px 0"><input type="text" id="q" placeholder="Ej: amazing spider-man" aria-label="Buscar serie"><button id="go">Buscar</button></div>
+  <div class="row" style="flex-wrap:nowrap;margin-bottom:16px"><input type="text" id="q" placeholder="Ej: amazing spider-man" aria-label="Buscar serie"><button class="btn" id="go">Buscar</button></div>
   <div id="res"></div>
 </section>
 <section id="v-set" hidden>
   <h1>Ajustes</h1>
-  <div class="panel" style="margin-top:12px">
+  <div class="panel">
     <label for="api"><b>URL de tu Worker</b></label>
-    <p class="muted">La dirección que te da Cloudflare al publicar el Worker.</p>
+    <p class="mu" style="margin:4px 0 10px">Solo la dirección base, sin nada después de workers.dev.</p>
     <input type="url" id="api" placeholder="https://comics.tu-usuario.workers.dev">
-    <div class="row" style="margin-top:10px"><button id="saveApi">Guardar</button><button id="all">Actualizar todo</button></div>
+    <div class="row" style="margin-top:10px"><button class="btn" id="saveApi">Guardar</button><button class="btn" id="all">Actualizar todo</button></div>
   </div>
-  <div class="panel"><button id="wipe">Borrar todos los datos</button></div>
+  <div class="panel"><button class="btn" id="wipe">Borrar todos los datos</button></div>
 </section>
 </main>
+<div id="sheet" hidden></div>
 <nav>
-  <button data-t="cal" class="on">Calendario</button><button data-t="col">Colección</button><button data-t="add">Añadir</button><button data-t="set">Ajustes</button>
+  <button data-t="lib" class="on"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/></svg>Biblioteca</button>
+  <button data-t="cal"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Calendario</button>
+  <button data-t="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Añadir</button>
+  <button data-t="set"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>Ajustes</button>
 </nav>
 <script>
-const KEY='comics-pwa-v1', COLORS=['#FFD23F','#FF8FA3','#7EE0C3','#8FB8FF','#C3A6FF','#FFB36B'];
+const KEY='comics-pwa-v1',COLORS=['#FFD23F','#FF8FA3','#7EE0C3','#8FB8FF','#C3A6FF','#FFB36B'];
 const $=s=>document.querySelector(s);
-let S=load(), now=new Date(), M={y:now.getFullYear(),m:now.getMonth()}, sel=null;
-function load(){try{const o=JSON.parse(localStorage.getItem(KEY));if(o&&o.series)return o}catch(e){}return{api:'',series:[]}}
+let S=load(),now=new Date(),M={y:now.getFullYear(),m:now.getMonth()},sel=null,tabNow='lib',openId=null,sheet=null;
+function load(){try{const o=JSON.parse(localStorage.getItem(KEY));if(o&&o.series)return o}catch(e){}return{api:'',v:2,series:[]}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+if(!S.v){S.v=2;S.series.forEach(s=>s.synced=0);save()}
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
+const short=d=>new Date(d+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short'});
 function toast(t){const m=$('#msg');m.textContent=t;m.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>m.hidden=true,4000)}
+const cov=(img,name,c,inner)=>`<div class="cv" style="--c:${c}"><b>${esc(name)}</b>${img?`<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''}${inner||''}</div>`;
 
 async function api(path){
   if(!S.api)throw new Error('Falta la URL del Worker en Ajustes');
@@ -120,8 +138,9 @@ async function fetchAll(path){
 async function refresh(s){
   const items=await fetchAll('/series/'+s.id+'/issue_list/');
   const old={};s.issues.forEach(i=>old[i.id]=i);
-  s.issues=items.map(i=>({id:i.id,n:i.number,date:i.store_date||i.cover_date||'',own:!!(old[i.id]&&old[i.id].own),read:!!(old[i.id]&&old[i.id].read)}));
-  s.synced=Date.now();save();
+  s.issues=items.map(i=>({id:i.id,n:i.number,date:i.store_date||i.cover_date||'',img:i.image||'',own:!!(old[i.id]&&old[i.id].own),read:!!(old[i.id]&&old[i.id].read)}));
+  const first=s.issues.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n)).find(i=>i.img);
+  s.img=first?first.img:'';s.synced=Date.now();save();
 }
 async function refreshAll(quiet){
   let fail=0;
@@ -132,68 +151,94 @@ async function refreshAll(quiet){
   }
   render();if(!quiet&&!fail)toast('Fechas actualizadas');
 }
+const find=id=>S.series.find(s=>s.id==id);
+const stats=s=>({n:s.issues.length,o:s.issues.filter(i=>i.own).length,r:s.issues.filter(i=>i.read).length});
 
+function renderLib(){
+  const el=$('#v-lib'),t=iso(new Date());
+  const s=openId&&find(openId);
+  if(!s){
+    openId=null;
+    el.innerHTML='<h1>Biblioteca</h1>'+(S.series.length?`<div class="shelf">${S.series.map(s=>{
+      const st=stats(s),nx=s.issues.filter(i=>i.date>=t).sort((a,b)=>a.date<b.date?-1:1)[0];
+      return`<button class="bk" data-open="${s.id}">${cov(s.img,s.name,s.color,nx&&s.follow?`<em class="pill">Sale ${short(nx.date)}</em>`:'')}<h3>${esc(s.name)}</h3><p class="mu">${st.r} de ${st.n} leídos</p><div class="pg"><i style="width:${st.n?st.r/st.n*100:0}%"></i></div></button>`}).join('')}</div>`
+      :'<p class="mu">Tu biblioteca está vacía. Busca una serie en la pestaña Añadir.</p>');
+    return;
+  }
+  const st=stats(s),is=s.issues.slice().sort((a,b)=>parseFloat(b.n)-parseFloat(a.n));
+  el.innerHTML=`<button class="back" data-back>‹ Biblioteca</button><div class="hero">${cov(s.img,s.name,s.color)}<div><h1 style="font-size:1.5rem;margin:0">${esc(s.name)}</h1><p class="mu">${s.year?esc(s.year)+' · ':''}${st.o} obtenidos · ${st.r} leídos de ${st.n}</p></div></div>
+  <div class="row" style="margin:12px 0 20px"><button class="btn ${s.follow?'on':''}" data-a="fol">${s.follow?'Siguiendo':'Pausada'}</button><button class="btn" data-a="ref">Actualizar</button><button class="btn" data-a="del">Quitar</button></div>
+  <div class="issues">${is.map(i=>`<button class="is${i.own?'':' miss'}" data-iss="${s.id}:${i.id}">${cov(i.img,s.name+' #'+i.n,s.color,i.read?'<em class="pill ok">Leído</em>':i.own?'<em class="pill">Tengo</em>':'')}<p>#${esc(i.n)}</p><p class="mu">${i.date?short(i.date):'Sin fecha'}</p></button>`).join('')}</div>`;
+}
 function events(){const ev={};S.series.forEach(s=>{if(s.follow)s.issues.forEach(i=>{if(i.date)(ev[i.date]=ev[i.date]||[]).push({s,i})})});return ev}
-const itemHTML=e=>`<div class="item" style="--c:${e.s.color}"><span class="chip"></span><div><b>${esc(e.s.name)}</b> #${esc(e.i.n)}</div><div class="r">${fmt(e.i.date)}${e.i.own?'<br>Lo tienes':''}</div></div>`;
-
+const row=e=>`<button class="li" data-iss="${e.s.id}:${e.i.id}">${cov(e.i.img||e.s.img,'#'+e.i.n,e.s.color)}<div><h3>${esc(e.s.name)} #${esc(e.i.n)}</h3><p class="mu">${e.i.own?'Lo tienes':'Pendiente'}</p></div><div class="r mu">${short(e.i.date)}</div></button>`;
 function renderCal(){
   const ev=events(),{y,m}=M,first=new Date(y,m,1),off=(first.getDay()+6)%7,dim=new Date(y,m+1,0).getDate(),t=iso(new Date());
+  const up=[];Object.keys(ev).forEach(k=>{if(k>=t)ev[k].forEach(e=>up.push(e))});up.sort((a,b)=>a.i.date<b.i.date?-1:1);
+  $('#rail').innerHTML=up.length?up.slice(0,12).map(e=>`<button class="up" data-iss="${e.s.id}:${e.i.id}">${cov(e.i.img||e.s.img,e.s.name+' #'+e.i.n,e.s.color,`<em class="pill">${short(e.i.date)}</em>`)}<p>${esc(e.s.name)} #${esc(e.i.n)}</p></button>`).join(''):'<p class="mu" style="padding:0 16px 8px">No hay lanzamientos próximos.</p>';
   $('#mt').textContent=first.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
   let h=['L','M','X','J','V','S','D'].map(d=>`<div class="wd">${d}</div>`).join('');
   for(let i=0,n=Math.ceil((off+dim)/7)*7;i<n;i++){
-    const d=new Date(y,m,1-off+i),k=iso(d),list=ev[k]||[];
-    h+=`<button class="d${d.getMonth()!==m?' off':''}${k===t?' today':''}${k===sel?' sel':''}" data-d="${k}" aria-label="${fmt(k)}"><span>${d.getDate()}</span><div class="dots">${list.slice(0,4).map(e=>`<i class="dot${e.i.own?' done':''}" style="--c:${e.s.color}"></i>`).join('')}</div></button>`;
+    const d=new Date(y,m,1-off+i),k=iso(d),l=ev[k]||[];
+    h+=`<button class="d${d.getMonth()!==m?' off':''}${k===t?' today':''}${k===sel?' sel':''}" data-d="${k}" aria-label="${fmt(k)}"><span>${d.getDate()}</span><div class="dots">${l.slice(0,3).map(e=>`<i class="dot${e.i.own?' done':''}" style="--c:${e.s.color}"></i>`).join('')}</div></button>`;
   }
   $('#grid').innerHTML=h;
-  $('#daylist').innerHTML=sel?((ev[sel]||[]).map(itemHTML).join('')||`<p class="muted">Sin lanzamientos el ${fmt(sel)}.</p>`):'';
-  const up=[];Object.keys(ev).forEach(k=>{if(k>=t)ev[k].forEach(e=>up.push(e))});
-  up.sort((a,b)=>a.i.date<b.i.date?-1:1);
-  $('#up').innerHTML=up.length?up.slice(0,12).map(itemHTML).join(''):`<p class="muted">${S.series.length?'No hay lanzamientos próximos.':'Añade tu primera serie en la pestaña Añadir.'}</p>`;
+  $('#daylist').innerHTML=sel?((ev[sel]||[]).map(row).join('')||`<p class="mu" style="padding:10px 0">Sin lanzamientos el ${fmt(sel)}.</p>`):'';
 }
-function renderList(){
-  if(!S.series.length){$('#list').innerHTML='<p class="muted">Aún no sigues ninguna serie.</p>';return}
-  $('#list').innerHTML=S.series.map(s=>{
-    const is=s.issues.slice().sort((a,b)=>parseFloat(b.n)-parseFloat(a.n)),o=is.filter(i=>i.own).length,r=is.filter(i=>i.read).length;
-    return`<div class="panel sc" style="--c:${s.color}" data-s="${s.id}"><h3>${esc(s.name)}</h3><p class="muted">${s.year?esc(s.year)+' · ':''}${o} obtenidos · ${r} leídos de ${is.length}${s.synced?'':' · sin sincronizar'}</p>
-    <div class="row"><button data-a="fol" class="${s.follow?'on':''}">${s.follow?'Siguiendo':'Pausada'}</button><button data-a="ref">Actualizar</button><button data-a="del">Quitar</button></div>
-    <details><summary>Números (${is.length})</summary>${is.map(i=>`<div class="iss" data-i="${i.id}"><b>#${esc(i.n)}</b><span class="dt">${i.date?fmt(i.date):'Sin fecha'}</span><button data-a="own" class="${i.own?'on':''}">Lo tengo</button><button data-a="read" class="${i.read?'on':''}">Leído</button></div>`).join('')}</details></div>`}).join('');
+function renderSheet(){
+  const el=$('#sheet');if(!sheet){el.hidden=true;el.innerHTML='';return}
+  const{s,i}=sheet;el.hidden=false;
+  el.innerHTML=`<div class="bd" data-x></div><div class="sh" role="dialog" aria-label="${esc(s.name)} ${esc(i.n)}">${cov(i.img||s.img,s.name+' #'+i.n,s.color)}<div><div><h3>${esc(s.name)} #${esc(i.n)}</h3><p class="mu">${i.date?fmt(i.date):'Sin fecha'}</p></div><button class="btn ${i.own?'on':''}" data-t2="own">Lo tengo</button><button class="btn ${i.read?'on':''}" data-t2="read">Leído</button><button class="btn" data-x>Cerrar</button></div></div>`;
 }
-function render(){renderCal();renderList()}
-
-$('#grid').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;sel=sel===b.dataset.d?null:b.dataset.d;renderCal()};
+function render(){
+  ['lib','cal','add','set'].forEach(x=>$('#v-'+x).hidden=x!==tabNow);
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tabNow));
+  renderLib();renderCal();renderSheet();
+}
+function tab(t){tabNow=t;if(t==='lib')openId=null;sheet=null;render();window.scrollTo(0,0)}
+document.querySelector('nav').onclick=e=>{const b=e.target.closest('[data-t]');if(b)tab(b.dataset.t)};
+function openIss(v){const[a,b]=v.split(':');const s=find(a);sheet={s,i:s.issues.find(x=>x.id==b)};renderSheet()}
+$('#v-lib').onclick=async e=>{
+  const o=e.target.closest('[data-open]');if(o){openId=+o.dataset.open;render();window.scrollTo(0,0);return}
+  if(e.target.closest('[data-back]')){openId=null;render();return}
+  const is=e.target.closest('[data-iss]');if(is){openIss(is.dataset.iss);return}
+  const b=e.target.closest('[data-a]');if(!b)return;const s=find(openId);
+  if(b.dataset.a==='fol'){s.follow=!s.follow;save();render()}
+  else if(b.dataset.a==='del'){if(!confirm('¿Quitar esta serie y su progreso?'))return;S.series=S.series.filter(x=>x!==s);openId=null;save();render()}
+  else{try{b.textContent='...';await refresh(s)}catch(err){toast(err.message)}render()}
+};
+$('#v-cal').onclick=e=>{
+  const is=e.target.closest('[data-iss]');if(is){openIss(is.dataset.iss);return}
+  const d=e.target.closest('[data-d]');if(d){sel=sel===d.dataset.d?null:d.dataset.d;renderCal()}
+};
+$('#sheet').onclick=e=>{
+  if(e.target.closest('[data-x]')){sheet=null;renderSheet();return}
+  const b=e.target.closest('[data-t2]');if(!b)return;const i=sheet.i,a=b.dataset.t2;
+  i[a]=!i[a];if(a==='read'&&i.read)i.own=true;if(a==='own'&&!i.own)i.read=false;save();render();
+};
 $('#prev').onclick=()=>{M.m--;if(M.m<0){M.m=11;M.y--}renderCal()};
 $('#next').onclick=()=>{M.m++;if(M.m>11){M.m=0;M.y++}renderCal()};
-$('#list').onclick=async e=>{
-  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,s=S.series.find(x=>x.id==b.closest('[data-s]').dataset.s);
-  if(a==='fol')s.follow=!s.follow;
-  else if(a==='del'){if(!confirm('¿Quitar esta serie y su progreso?'))return;S.series=S.series.filter(x=>x!==s)}
-  else if(a==='ref'){try{b.textContent='...';await refresh(s)}catch(err){toast(err.message)}}
-  else{const i=s.issues.find(x=>x.id==b.closest('[data-i]').dataset.i);i[a]=!i[a];if(a==='read'&&i.read)i.own=true;if(a==='own'&&!i.own)i.read=false}
-  const open=[...document.querySelectorAll('#list details')].map(d=>d.open);save();render();
-  document.querySelectorAll('#list details').forEach((d,k)=>d.open=open[k]);
-};
 async function search(){
-  const q=$('#q').value.trim();if(!q)return;$('#res').innerHTML='<p class="muted">Buscando...</p>';
+  const q=$('#q').value.trim();if(!q)return;$('#res').innerHTML='<p class="mu">Buscando...</p>';
   try{
     const d=await api('/series/?name='+encodeURIComponent(q)),r=d.results||[];
-    $('#res').innerHTML=r.length?r.map(s=>`<div class="panel"><b>${esc(s.series||s.name)}</b><p class="muted">${s.volume?'Vol. '+esc(s.volume)+' · ':''}${esc(s.year_began||'')}${s.issue_count?' · '+esc(s.issue_count)+' números':''}</p><button data-id="${s.id}" data-n="${esc(s.series||s.name)}" data-y="${esc(s.year_began||'')}" data-v="${esc(s.volume||'')}">Seguir</button></div>`).join(''):'<p class="muted">Sin resultados.</p>';
+    $('#res').innerHTML=r.length?r.map(s=>`<div class="panel res"><div><h3>${esc(s.series||s.name)}</h3><p class="mu">${s.volume?'Vol. '+esc(s.volume)+' · ':''}${esc(s.year_began||'')}${s.issue_count?' · '+esc(s.issue_count)+' números':''}</p></div><button class="btn" data-id="${s.id}" data-n="${esc(s.series||s.name)}" data-y="${esc(s.year_began||'')}" data-v="${esc(s.volume||'')}">Seguir</button></div>`).join(''):'<p class="mu">Sin resultados. La búsqueda es literal: revisa guiones y el título exacto.</p>';
   }catch(e){$('#res').innerHTML='';toast(e.message)}
 }
 $('#go').onclick=search;$('#q').onkeydown=e=>{if(e.key==='Enter')search()};
 $('#res').onclick=async e=>{
   const b=e.target.closest('[data-id]');if(!b)return;
   if(S.series.some(s=>s.id==b.dataset.id)){toast('Ya la sigues');return}
-  const s={id:+b.dataset.id,name:b.dataset.n+(b.dataset.v?' vol. '+b.dataset.v:''),year:b.dataset.y,color:COLORS[S.series.length%COLORS.length],follow:true,issues:[],synced:0};
+  const s={id:+b.dataset.id,name:b.dataset.n+(b.dataset.v?' vol. '+b.dataset.v:''),year:b.dataset.y,color:COLORS[S.series.length%COLORS.length],follow:true,issues:[],img:'',synced:0};
   S.series.push(s);save();b.textContent='Cargando...';
-  try{await refresh(s);toast('Serie añadida');tab('cal')}catch(err){toast(err.message)}render();
+  try{await refresh(s);toast('Serie añadida');openId=null;tab('lib')}catch(err){toast(err.message)}render();
 };
 $('#saveApi').onclick=()=>{S.api=$('#api').value.trim();save();toast('Guardado')};
 $('#all').onclick=()=>refreshAll(false);
-$('#wipe').onclick=()=>{if(confirm('¿Borrar toda tu colección?')){S={api:S.api,series:[]};save();render()}};
-function tab(t){['cal','col','add','set'].forEach(x=>$('#v-'+x).hidden=x!==t);document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));window.scrollTo(0,0)}
-document.querySelector('nav').onclick=e=>{const b=e.target.closest('[data-t]');if(b)tab(b.dataset.t)};
-$('#api').value=S.api;render();
-if(!S.api)tab('set');else refreshAll(true);
+$('#wipe').onclick=()=>{if(confirm('¿Borrar toda tu colección?')){S={api:S.api,v:2,series:[]};save();render()}};
+$('#api').value=S.api;
+if(!S.api)tabNow='set';
+render();if(S.api)refreshAll(true);
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
