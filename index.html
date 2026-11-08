@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFD23F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cómics">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<title>Mis cómics</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600&display=swap">
+<style>
+:root{--paper:#EDEFF5;--panel:#fff;--ink:#14161F;--muted:#5B6075;--hot:#FFD23F;--line:#14161F}
+@media (prefers-color-scheme:dark){:root{--paper:#12131A;--panel:#1C1E29;--ink:#F2F3F8;--muted:#A0A5BA;--line:#F2F3F8}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:16px/1.4 Archivo,system-ui,sans-serif;padding:env(safe-area-inset-top,0px) 0 calc(76px + env(safe-area-inset-bottom,0px))}
+main{padding:14px}
+h1,h2,h3{font-family:"Archivo Black",Impact,sans-serif;font-weight:400;margin:0}
+h1{font-size:1.9rem}h2{font-size:1.15rem;margin:20px 0 8px}
+button,input{font:inherit;color:inherit}
+button{background:var(--panel);border:3px solid var(--line);padding:10px 14px;font-weight:600;border-radius:0;min-height:44px}
+button:active,button.on{background:var(--hot);color:#14161F}
+input[type=text],input[type=url]{width:100%;background:var(--panel);border:3px solid var(--line);padding:10px;min-height:44px}
+.panel{background:var(--panel);border:3px solid var(--line);box-shadow:4px 4px 0 var(--line);padding:12px;margin-bottom:14px}
+.row{display:flex;gap:8px;align-items:center}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.bar h2{margin:0;text-transform:capitalize}
+.bar button{width:44px;padding:0}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;border-top:2px solid var(--line);border-left:2px solid var(--line)}
+.wd{text-align:center;font-size:.8rem;color:var(--muted);font-weight:600;padding:3px;border-right:2px solid var(--line);border-bottom:2px solid var(--line)}
+.d{min-height:50px;padding:3px 0;border:0;border-right:2px solid var(--line);border-bottom:2px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;font-weight:600;font-size:.9rem}
+.d.off{opacity:.35}.d.today span{background:var(--hot);color:#14161F;padding:0 5px;border:2px solid var(--line)}
+.d.sel{background:var(--hot);color:#14161F}
+.dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center}
+.dot{width:10px;height:10px;background:var(--c);border:2px solid var(--line);border-radius:50%}
+.dot.done{opacity:.4}
+.item{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:2px dashed var(--muted)}
+.item:last-child{border:0}
+.chip{flex:none;width:12px;align-self:stretch;background:var(--c);border:2px solid var(--line)}
+.item .r{margin-left:auto;text-align:right;color:var(--muted);font-size:.85rem}
+.muted{color:var(--muted);font-size:.9rem}
+.sc{border-left:12px solid var(--c)}
+.sc h3{font-size:1.1rem}
+.iss{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--muted)}
+.iss b{min-width:52px}.iss .dt{flex:1;color:var(--muted);font-size:.85rem}
+.iss button{min-height:36px;padding:2px 10px;border-width:2px;font-size:.85rem}
+summary{cursor:pointer;padding:8px 0;font-weight:600}
+nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:var(--panel);border-top:3px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{border:0;border-right:2px solid var(--line);min-height:60px;font-size:.85rem}
+nav button:last-child{border-right:0}
+#msg{position:fixed;left:14px;right:14px;top:calc(10px + env(safe-area-inset-top,0px));background:var(--ink);color:var(--paper);padding:10px 12px;z-index:5}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div id="msg" hidden role="status"></div>
+<main>
+<section id="v-cal">
+  <h1>Calendario</h1>
+  <div class="panel" style="margin-top:12px">
+    <div class="bar"><button id="prev" aria-label="Mes anterior">&lt;</button><h2 id="mt"></h2><button id="next" aria-label="Mes siguiente">&gt;</button></div>
+    <div class="grid" id="grid"></div>
+    <div id="daylist" style="margin-top:10px"></div>
+  </div>
+  <h2>Próximos lanzamientos</h2>
+  <div class="panel" id="up"></div>
+</section>
+<section id="v-col" hidden>
+  <h1>Colección</h1>
+  <div id="list" style="margin-top:12px"></div>
+</section>
+<section id="v-add" hidden>
+  <h1>Añadir serie</h1>
+  <div class="row" style="margin:12px 0"><input type="text" id="q" placeholder="Ej: amazing spider-man" aria-label="Buscar serie"><button id="go">Buscar</button></div>
+  <div id="res"></div>
+</section>
+<section id="v-set" hidden>
+  <h1>Ajustes</h1>
+  <div class="panel" style="margin-top:12px">
+    <label for="api"><b>URL de tu Worker</b></label>
+    <p class="muted">La dirección que te da Cloudflare al publicar el Worker.</p>
+    <input type="url" id="api" placeholder="https://comics.tu-usuario.workers.dev">
+    <div class="row" style="margin-top:10px"><button id="saveApi">Guardar</button><button id="all">Actualizar todo</button></div>
+  </div>
+  <div class="panel"><button id="wipe">Borrar todos los datos</button></div>
+</section>
+</main>
+<nav>
+  <button data-t="cal" class="on">Calendario</button><button data-t="col">Colección</button><button data-t="add">Añadir</button><button data-t="set">Ajustes</button>
+</nav>
+<script>
+const KEY='comics-pwa-v1', COLORS=['#FFD23F','#FF8FA3','#7EE0C3','#8FB8FF','#C3A6FF','#FFB36B'];
+const $=s=>document.querySelector(s);
+let S=load(), now=new Date(), M={y:now.getFullYear(),m:now.getMonth()}, sel=null;
+function load(){try{const o=JSON.parse(localStorage.getItem(KEY));if(o&&o.series)return o}catch(e){}return{api:'',series:[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
+function toast(t){const m=$('#msg');m.textContent=t;m.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>m.hidden=true,4000)}
+
+async function api(path){
+  if(!S.api)throw new Error('Falta la URL del Worker en Ajustes');
+  const r=await fetch(S.api.replace(/\/$/,'')+path);
+  if(!r.ok)throw new Error('Error '+r.status+' al consultar Metron');
+  return r.json();
+}
+async function fetchAll(path){
+  let out=[];
+  for(let i=0;i<15&&path;i++){
+    const d=await api(path);out=out.concat(d.results||[]);
+    if(d.next){const u=new URL(d.next);path=u.pathname.replace(/^\/api/,'')+u.search}else path=null;
+  }
+  return out;
+}
+async function refresh(s){
+  const items=await fetchAll('/series/'+s.id+'/issue_list/');
+  const old={};s.issues.forEach(i=>old[i.id]=i);
+  s.issues=items.map(i=>({id:i.id,n:i.number,date:i.store_date||i.cover_date||'',own:!!(old[i.id]&&old[i.id].own),read:!!(old[i.id]&&old[i.id].read)}));
+  s.synced=Date.now();save();
+}
+async function refreshAll(quiet){
+  let fail=0;
+  for(const s of S.series){
+    if(!s.follow)continue;
+    if(quiet&&Date.now()-(s.synced||0)<432e5)continue;
+    try{await refresh(s)}catch(e){fail++;if(!quiet)toast(e.message)}
+  }
+  render();if(!quiet&&!fail)toast('Fechas actualizadas');
+}
+
+function events(){const ev={};S.series.forEach(s=>{if(s.follow)s.issues.forEach(i=>{if(i.date)(ev[i.date]=ev[i.date]||[]).push({s,i})})});return ev}
+const itemHTML=e=>`<div class="item" style="--c:${e.s.color}"><span class="chip"></span><div><b>${esc(e.s.name)}</b> #${esc(e.i.n)}</div><div class="r">${fmt(e.i.date)}${e.i.own?'<br>Lo tienes':''}</div></div>`;
+
+function renderCal(){
+  const ev=events(),{y,m}=M,first=new Date(y,m,1),off=(first.getDay()+6)%7,dim=new Date(y,m+1,0).getDate(),t=iso(new Date());
+  $('#mt').textContent=first.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+  let h=['L','M','X','J','V','S','D'].map(d=>`<div class="wd">${d}</div>`).join('');
+  for(let i=0,n=Math.ceil((off+dim)/7)*7;i<n;i++){
+    const d=new Date(y,m,1-off+i),k=iso(d),list=ev[k]||[];
+    h+=`<button class="d${d.getMonth()!==m?' off':''}${k===t?' today':''}${k===sel?' sel':''}" data-d="${k}" aria-label="${fmt(k)}"><span>${d.getDate()}</span><div class="dots">${list.slice(0,4).map(e=>`<i class="dot${e.i.own?' done':''}" style="--c:${e.s.color}"></i>`).join('')}</div></button>`;
+  }
+  $('#grid').innerHTML=h;
+  $('#daylist').innerHTML=sel?((ev[sel]||[]).map(itemHTML).join('')||`<p class="muted">Sin lanzamientos el ${fmt(sel)}.</p>`):'';
+  const up=[];Object.keys(ev).forEach(k=>{if(k>=t)ev[k].forEach(e=>up.push(e))});
+  up.sort((a,b)=>a.i.date<b.i.date?-1:1);
+  $('#up').innerHTML=up.length?up.slice(0,12).map(itemHTML).join(''):`<p class="muted">${S.series.length?'No hay lanzamientos próximos.':'Añade tu primera serie en la pestaña Añadir.'}</p>`;
+}
+function renderList(){
+  if(!S.series.length){$('#list').innerHTML='<p class="muted">Aún no sigues ninguna serie.</p>';return}
+  $('#list').innerHTML=S.series.map(s=>{
+    const is=s.issues.slice().sort((a,b)=>parseFloat(b.n)-parseFloat(a.n)),o=is.filter(i=>i.own).length,r=is.filter(i=>i.read).length;
+    return`<div class="panel sc" style="--c:${s.color}" data-s="${s.id}"><h3>${esc(s.name)}</h3><p class="muted">${s.year?esc(s.year)+' · ':''}${o} obtenidos · ${r} leídos de ${is.length}${s.synced?'':' · sin sincronizar'}</p>
+    <div class="row"><button data-a="fol" class="${s.follow?'on':''}">${s.follow?'Siguiendo':'Pausada'}</button><button data-a="ref">Actualizar</button><button data-a="del">Quitar</button></div>
+    <details><summary>Números (${is.length})</summary>${is.map(i=>`<div class="iss" data-i="${i.id}"><b>#${esc(i.n)}</b><span class="dt">${i.date?fmt(i.date):'Sin fecha'}</span><button data-a="own" class="${i.own?'on':''}">Lo tengo</button><button data-a="read" class="${i.read?'on':''}">Leído</button></div>`).join('')}</details></div>`}).join('');
+}
+function render(){renderCal();renderList()}
+
+$('#grid').onclick=e=>{const b=e.target.closest('[data-d]');if(!b)return;sel=sel===b.dataset.d?null:b.dataset.d;renderCal()};
+$('#prev').onclick=()=>{M.m--;if(M.m<0){M.m=11;M.y--}renderCal()};
+$('#next').onclick=()=>{M.m++;if(M.m>11){M.m=0;M.y++}renderCal()};
+$('#list').onclick=async e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,s=S.series.find(x=>x.id==b.closest('[data-s]').dataset.s);
+  if(a==='fol')s.follow=!s.follow;
+  else if(a==='del'){if(!confirm('¿Quitar esta serie y su progreso?'))return;S.series=S.series.filter(x=>x!==s)}
+  else if(a==='ref'){try{b.textContent='...';await refresh(s)}catch(err){toast(err.message)}}
+  else{const i=s.issues.find(x=>x.id==b.closest('[data-i]').dataset.i);i[a]=!i[a];if(a==='read'&&i.read)i.own=true;if(a==='own'&&!i.own)i.read=false}
+  const open=[...document.querySelectorAll('#list details')].map(d=>d.open);save();render();
+  document.querySelectorAll('#list details').forEach((d,k)=>d.open=open[k]);
+};
+async function search(){
+  const q=$('#q').value.trim();if(!q)return;$('#res').innerHTML='<p class="muted">Buscando...</p>';
+  try{
+    const d=await api('/series/?name='+encodeURIComponent(q)),r=d.results||[];
+    $('#res').innerHTML=r.length?r.map(s=>`<div class="panel"><b>${esc(s.series||s.name)}</b><p class="muted">${s.volume?'Vol. '+esc(s.volume)+' · ':''}${esc(s.year_began||'')}${s.issue_count?' · '+esc(s.issue_count)+' números':''}</p><button data-id="${s.id}" data-n="${esc(s.series||s.name)}" data-y="${esc(s.year_began||'')}" data-v="${esc(s.volume||'')}">Seguir</button></div>`).join(''):'<p class="muted">Sin resultados.</p>';
+  }catch(e){$('#res').innerHTML='';toast(e.message)}
+}
+$('#go').onclick=search;$('#q').onkeydown=e=>{if(e.key==='Enter')search()};
+$('#res').onclick=async e=>{
+  const b=e.target.closest('[data-id]');if(!b)return;
+  if(S.series.some(s=>s.id==b.dataset.id)){toast('Ya la sigues');return}
+  const s={id:+b.dataset.id,name:b.dataset.n+(b.dataset.v?' vol. '+b.dataset.v:''),year:b.dataset.y,color:COLORS[S.series.length%COLORS.length],follow:true,issues:[],synced:0};
+  S.series.push(s);save();b.textContent='Cargando...';
+  try{await refresh(s);toast('Serie añadida');tab('cal')}catch(err){toast(err.message)}render();
+};
+$('#saveApi').onclick=()=>{S.api=$('#api').value.trim();save();toast('Guardado')};
+$('#all').onclick=()=>refreshAll(false);
+$('#wipe').onclick=()=>{if(confirm('¿Borrar toda tu colección?')){S={api:S.api,series:[]};save();render()}};
+function tab(t){['cal','col','add','set'].forEach(x=>$('#v-'+x).hidden=x!==t);document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));window.scrollTo(0,0)}
+document.querySelector('nav').onclick=e=>{const b=e.target.closest('[data-t]');if(b)tab(b.dataset.t)};
+$('#api').value=S.api;render();
+if(!S.api)tab('set');else refreshAll(true);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
